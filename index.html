@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="km" data-lang="km">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Virus Checker Bot · បូតពិនិត្យមេរោគ</title>
+  <meta name="description" content="A free Telegram bot that checks files with VirusTotal before you open them. បូត Telegram ឥតគិតថ្លៃ ដែលពិនិត្យឯកសារជាមួយ VirusTotal មុនពេលអ្នកបើកវា។">
+  <meta property="og:title" content="Virus Checker Bot for Telegram">
+  <meta property="og:description" content="Send a file to the bot. It checks it with VirusTotal and tells you if it's dangerous. ផ្ញើឯកសារទៅបូត វានឹងប្រាប់អ្នកថាវាមានគ្រោះថ្នាក់ឬអត់។">
+  <meta property="og:image" content="assets/logo.svg">
+  <meta name="theme-color" content="#0A6FB8">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/koulen-khmer-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/kantumruy-pro-khmer-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main"><span class="km" lang="km">រំលងទៅមាតិកា</span><span class="en" lang="en">Skip to content</span></a>
+
+  <header class="top">
+    <div class="wrap top__inner">
+      <a class="brand" href="#" aria-label="Virus Checker Bot">
+        <img src="assets/logo.svg" alt="" width="36" height="36">
+        <span class="brand__name">
+          <span class="km" lang="km">បូតពិនិត្យមេរោគ</span><span class="en" lang="en">Virus Checker</span>
+        </span>
+        <span class="beta"><span class="km" lang="km">សាកល្បង</span><span class="en" lang="en">Beta</span></span>
+      </a>
+      <div class="top__actions">
+        <div class="lang" role="group" aria-label="Language / ភាសា">
+          <button type="button" data-set-lang="km" aria-pressed="true" lang="km">ខ្មែរ</button>
+          <button type="button" data-set-lang="en" aria-pressed="false" lang="en">English</button>
+        </div>
+        <a class="btn btn--small" href="https://t.me/tg_virus_check_bot">
+          <span class="km" lang="km">បើកក្នុង Telegram</span><span class="en" lang="en">Open in Telegram</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero: the claim, plus a working demo of the bot's real replies -->
+    <section class="hero">
+      <div class="wrap hero__grid">
+        <div class="hero__text">
+          <h1>
+            <span class="km" lang="km">ពិនិត្យឯកសារ មុនពេលអ្នកបើកវា</span>
+            <span class="en" lang="en">Check a file before you open it</span>
+          </h1>
+          <p class="lede km" lang="km">ផ្ញើឯកសារទៅបូតក្នុង Telegram។ បូតពិនិត្យវាជាមួយម៉ាស៊ីនកំចាត់មេរោគរាប់សិបរបស់ VirusTotal ហើយឆ្លើយប្រាប់អ្នកយ៉ាងច្បាស់ថា ឯកសារនោះមានគ្រោះថ្នាក់ឬអត់ ជាធម្មតាក្នុងរយៈពេលប៉ុន្មានវិនាទី។</p>
+          <p class="lede en" lang="en">Send a file to the bot on Telegram. It checks it with VirusTotal's dozens of antivirus engines and tells you clearly whether it's dangerous, usually within seconds.</p>
+          <div class="hero__cta">
+            <a class="btn" href="https://t.me/tg_virus_check_bot">
+              <span class="km" lang="km">បើក @tg_virus_check_bot</span><span class="en" lang="en">Open @tg_virus_check_bot</span>
+            </a>
+            <a class="link" href="#use"><span class="km" lang="km">មើលរបៀបប្រើ</span><span class="en" lang="en">See how to use it</span></a>
+          </div>
+          <p class="hero__note km" lang="km">ប្រើដោយឥតគិតថ្លៃ។ បូតកំពុងស្ថិតក្នុងដំណាក់កាលសាកល្បង ហើយម្ចាស់បូតអនុម័តការជជែកថ្មីនីមួយៗ។ ការប្រើប្រាស់ជាហានិភ័យរបស់អ្នកផ្ទាល់ សូមអាន<a href="#disclaimer">ការបដិសេធការទទួលខុសត្រូវ</a>។</p>
+          <p class="hero__note en" lang="en">Free to use. The bot is in beta, and its owner approves each new chat. Use it at your own risk; see the <a href="#disclaimer">disclaimer</a>.</p>
+        </div>
+
+        <figure class="demo" aria-labelledby="demo-caption">
+          <div class="chat">
+            <div class="chat__head">
+              <img src="assets/logo.svg" alt="" width="40" height="40">
+              <div>
+                <strong lang="en">Telegram Virus Checker</strong>
+                <span lang="en">bot</span>
+              </div>
+            </div>
+            <div class="chat__wall" id="chat" aria-live="polite"></div>
+          </div>
+
+          <div class="picker">
+            <p class="picker__label">
+              <span class="km" lang="km">សាកល្បង៖ ជ្រើសឯកសារមួយដើម្បីផ្ញើ</span>
+              <span class="en" lang="en">Try it: pick a file to send</span>
+            </p>
+            <div class="picker__files" id="picker">
+              <button type="button" data-sample="eicar" aria-pressed="false">
+                <b lang="en">eicar-test.com</b>
+                <small><span class="km" lang="km">ឯកសារសាកល្បង</span><span class="en" lang="en">Antivirus test file</span></small>
+              </button>
+              <button type="button" data-sample="clean" aria-pressed="false">
+                <b lang="en">notes.pdf</b>
+                <small><span class="km" lang="km">ឯកសារស្អាត</span><span class="en" lang="en">Known clean file</span></small>
+              </button>
+              <button type="button" data-sample="caution" aria-pressed="false">
+                <b lang="en">tool.zip</b>
+                <small><span class="km" lang="km">ម៉ាស៊ីនមួយសង្ស័យ</span><span class="en" lang="en">Flagged by one engine</span></small>
+              </button>
+              <button type="button" data-sample="new" aria-pressed="false">
+                <b lang="en">setup.exe</b>
+                <small><span class="km" lang="km">ឯកសារថ្មីស្រឡាង</span><span class="en" lang="en">Brand-new file</span></small>
+              </button>
+              <button type="button" data-sample="private" aria-pressed="false">
+                <b lang="en">contract.pdf</b>
+                <small><span class="km" lang="km">ឯកសារឯកជន</span><span class="en" lang="en">Private document</span></small>
+              </button>
+            </div>
+          </div>
+
+          <figcaption id="demo-caption">
+            <span class="km" lang="km">ពាក្យក្នុងចម្លើយ គឺជាពាក្យពិតរបស់បូត (បូតឆ្លើយជាភាសាអង់គ្លេស)។ ឯកសារទាំងនេះជាគំរូ មានតែលទ្ធផល EICAR ទេដែលជាការស្កេនពិត។ ការស្កេនឯកសារថ្មី ត្រូវបានបង្ហាញលឿនជាងជាក់ស្តែង ដែលជាធម្មតាចំណាយពេល ១–៣ នាទី។</span>
+            <span class="en" lang="en">The replies use the bot's real wording (the bot replies in English). The files are samples; only the EICAR result is a real scan. The brand-new file is sped up here; in real life it takes 1–3 minutes.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- How it works: a real sequence -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <h2><span class="km" lang="km">របៀបដែលវាដំណើរការ</span><span class="en" lang="en">How it works</span></h2>
+        <ol class="steps">
+          <li>
+            <h3><span class="km" lang="km">អ្នកផ្ញើឯកសារ</span><span class="en" lang="en">You send a file</span></h3>
+            <p class="km" lang="km">ផ្ញើ ឬបញ្ជូនបន្ត កម្មវិធី ឯកសារ ឯកសារបង្ហាប់ ឬវីដេអូ ទំហំរហូតដល់ 20 MB ក្នុងការជជែកផ្ទាល់ជាមួយបូត ឬក្នុងក្រុមដែលមានបូត។</p>
+            <p class="en" lang="en">Send or forward an app, document, archive or video up to 20 MB, in a private chat with the bot or in a group it's in.</p>
+          </li>
+          <li>
+            <h3><span class="km" lang="km">បូតពិនិត្យស្នាមម្រាមដៃរបស់ឯកសារ</span><span class="en" lang="en">The bot checks its fingerprint</span></h3>
+            <p class="km" lang="km">បូតបង្កើតស្នាមម្រាមដៃឌីជីថល (SHA-256) របស់ឯកសារ ហើយសួរ VirusTotal ថាតើឯកសារនេះធ្លាប់ត្រូវបានពិនិត្យរួចឬនៅ។ បើធ្លាប់ បូតដឹងចម្លើយភ្លាម ដោយមិនចាំបាច់បញ្ជូនឯកសាររបស់អ្នកទៅ VirusTotal ឡើយ។</p>
+            <p class="en" lang="en">It makes the file's digital fingerprint (SHA-256) and asks VirusTotal whether this file has been checked before. If it has, the bot knows the answer right away, without uploading your file.</p>
+          </li>
+          <li>
+            <h3><span class="km" lang="km">អ្នកទទួលបានចម្លើយច្បាស់លាស់</span><span class="en" lang="en">You get a clear reply</span></h3>
+            <p class="km" lang="km">បូតឆ្លើយតបលើឯកសាររបស់អ្នក ដោយការព្រមាន ឬការបញ្ជាក់ថាគ្មានអ្វីត្រូវបានរកឃើញ ព្រមទាំងតំណទៅរបាយការណ៍ពេញលេញនៅលើ VirusTotal។</p>
+            <p class="en" lang="en">The bot replies to your file with a warning or an all-clear, plus a link to the full report on VirusTotal.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- What each reply means -->
+    <section class="section section--tint" id="replies">
+      <div class="wrap">
+        <h2><span class="km" lang="km">អត្ថន័យនៃចម្លើយនីមួយៗ</span><span class="en" lang="en">What the replies mean</span></h2>
+        <p class="intro km" lang="km">បូតឆ្លើយជាភាសាអង់គ្លេស។ នេះជាអត្ថន័យ និងអ្វីដែលអ្នកគួរធ្វើ។</p>
+        <p class="intro en" lang="en">Here's what each reply means and what to do next.</p>
+
+        <div class="legend" role="table" aria-label="Bot replies">
+          <div class="legend__row legend__head" role="row">
+            <span role="columnheader"><span class="km" lang="km">បូតនិយាយថា</span><span class="en" lang="en">The bot says</span></span>
+            <span role="columnheader"><span class="km" lang="km">អត្ថន័យ</span><span class="en" lang="en">What it means</span></span>
+            <span role="columnheader"><span class="km" lang="km">អ្វីដែលត្រូវធ្វើ</span><span class="en" lang="en">What to do</span></span>
+          </div>
+
+          <div class="legend__row v-danger" role="row">
+            <span role="cell" class="say" lang="en">🚨 WARNING — likely malicious</span>
+            <span role="cell"><span class="km" lang="km">ម៉ាស៊ីនកំចាត់មេរោគចាប់ពី ៣ ឡើងទៅ ថាឯកសារនេះមានមេរោគ។</span><span class="en" lang="en">Three or more antivirus engines say the file is malicious.</span></span>
+            <span role="cell" class="do"><span class="km" lang="km">កុំបើកវា។ លុបវាចោល ហើយប្រាប់អ្នកផ្ញើ។</span><span class="en" lang="en">Don't open it. Delete it and tell the sender.</span></span>
+          </div>
+
+          <div class="legend__row v-caution" role="row">
+            <span role="cell" class="say" lang="en">⚠️ Be careful</span>
+            <span role="cell"><span class="km" lang="km">ម៉ាស៊ីនមួយ ឬពីរសង្ស័យ ឬចាត់ទុកថាគួរឱ្យសង្ស័យ។ ពេលខ្លះជាការព្រមានខុស។</span><span class="en" lang="en">One or two engines flagged it, or called it suspicious. Sometimes this is a false alarm.</span></span>
+            <span role="cell" class="do"><span class="km" lang="km">បើកតែពេលអ្នកស្គាល់ និងទុកចិត្តអ្នកផ្ញើ ហើយកំពុងរង់ចាំឯកសារនេះ។</span><span class="en" lang="en">Only open it if you know and trust the sender and you were expecting this file.</span></span>
+          </div>
+
+          <div class="legend__row v-safe" role="row">
+            <span role="cell" class="say" lang="en">✅ No security vendors flagged this file</span>
+            <span role="cell"><span class="km" lang="km">ម៉ាស៊ីនទាំងអស់ដែលបានពិនិត្យ មិនរកឃើញអ្វីទេ។</span><span class="en" lang="en">Every engine that checked it found nothing.</span></span>
+            <span role="cell" class="do"><span class="km" lang="km">ទំនងជាមិនអីទេ។ ប៉ុន្តែលទ្ធផលស្អាត មិនមែនជាការធានាទេ មេរោគថ្មីៗពេលខ្លះអាចរត់រួច។</span><span class="en" lang="en">Probably fine. But a clean result isn't a guarantee: brand-new malware is sometimes missed.</span></span>
+          </div>
+
+          <div class="legend__row v-wait" role="row">
+            <span role="cell" class="say" lang="en">⏳ Being scanned now</span>
+            <span role="cell"><span class="km" lang="km">VirusTotal មិនធ្លាប់ឃើញឯកសារនេះទេ ដូច្នេះបូតបានផ្ញើវាទៅស្កេនពេញលេញ។</span><span class="en" lang="en">VirusTotal hasn't seen this file before, so the bot sent it for a full scan.</span></span>
+            <span role="cell" class="do"><span class="km" lang="km">រង់ចាំ ១–៣ នាទី។ សារដដែលនឹងប្តូរទៅជាលទ្ធផល។ កុំទាន់បើកឯកសារ។</span><span class="en" lang="en">Wait 1–3 minutes. The same message changes into the result. Don't open the file yet.</span></span>
+          </div>
+
+          <div class="legend__row v-info" role="row">
+            <span role="cell" class="say" lang="en">ℹ️ It was not uploaded, to keep it private</span>
+            <span role="cell"><span class="km" lang="km">ឯកសារនេះថ្មីចំពោះ VirusTotal ហើយជាប្រភេទឯកសារធម្មតា (ដូចជា PDF ឬ Word) ដូច្នេះបូតមិនបានបញ្ជូនវាទេ។</span><span class="en" lang="en">The file is new to VirusTotal and is an ordinary document (like PDF or Word), so the bot didn't upload it.</span></span>
+            <span role="cell" class="do"><span class="km" lang="km">បូតមិនអាចវាយតម្លៃវាបានទេ។ បើកតែពេលអ្នកទុកចិត្តអ្នកផ្ញើ។</span><span class="en" lang="en">The bot can't judge this one. Only open it if you trust the sender.</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instructions -->
+    <section class="section" id="use">
+      <div class="wrap">
+        <h2><span class="km" lang="km">របៀបប្រើប្រាស់</span><span class="en" lang="en">How to use it</span></h2>
+
+        <div class="guide">
+          <div class="guide__col">
+            <h3><span class="km" lang="km">ក្នុងការជជែកផ្ទាល់</span><span class="en" lang="en">In a private chat</span></h3>
+            <ol class="list">
+              <li><span class="km" lang="km">បើក <a href="https://t.me/tg_virus_check_bot">@tg_virus_check_bot</a> ក្នុង Telegram ហើយចុច <b>Start</b>។</span><span class="en" lang="en">Open <a href="https://t.me/tg_virus_check_bot">@tg_virus_check_bot</a> in Telegram and tap <b>Start</b>.</span></li>
+              <li><span class="km" lang="km">លើកដំបូង បូតនឹងស្នើម្ចាស់របស់វាឱ្យអនុម័តអ្នក។ អ្នកនឹងទទួលបានសារ នៅពេលត្រូវបានអនុម័ត។</span><span class="en" lang="en">The first time, the bot asks its owner to approve you. You'll get a message when you're approved.</span></li>
+              <li><span class="km" lang="km">ផ្ញើ ឬបញ្ជូនបន្តឯកសារ។ ផ្ញើជា <b>ឯកសារ (File)</b> មិនមែនជារូបភាពបង្ហាប់ទេ។</span><span class="en" lang="en">Send or forward the file. Send it as a <b>file</b>, not as a compressed photo.</span></li>
+              <li><span class="km" lang="km">អានចម្លើយរបស់បូត មុនពេលបើកឯកសារ។</span><span class="en" lang="en">Read the bot's reply before you open the file.</span></li>
+            </ol>
+          </div>
+          <div class="guide__col">
+            <h3><span class="km" lang="km">ក្នុងក្រុម</span><span class="en" lang="en">In a group</span></h3>
+            <ol class="list">
+              <li><span class="km" lang="km">បន្ថែមបូតចូលក្នុងក្រុមរបស់អ្នក។</span><span class="en" lang="en">Add the bot to your group.</span></li>
+              <li><span class="km" lang="km">រង់ចាំម្ចាស់បូតអនុម័តក្រុម។ បូតនឹងផ្ញើសារក្នុងក្រុម នៅពេលវារួចរាល់។</span><span class="en" lang="en">Wait for the owner to approve the group. The bot posts a message in the group when it's ready.</span></li>
+              <li><span class="km" lang="km">ដាក់បូតជា <b>អ្នកគ្រប់គ្រង (Admin)</b>។ បើគ្មាន Telegram មិនអនុញ្ញាតឱ្យបូតមើលឃើញឯកសារក្នុងក្រុមទេ។</span><span class="en" lang="en">Make the bot an <b>admin</b>. Otherwise Telegram may not let it see files in the group.</span></li>
+              <li><span class="km" lang="km">ចាប់ពីពេលនោះ រាល់ឯកសារដែលផ្ញើក្នុងក្រុម នឹងត្រូវពិនិត្យដោយស្វ័យប្រវត្តិ។</span><span class="en" lang="en">From then on, every file posted in the group is checked automatically.</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="notes">
+          <h3><span class="km" lang="km">គួរដឹង</span><span class="en" lang="en">Good to know</span></h3>
+          <ul>
+            <li><span class="km" lang="km">ឯកសាររហូតដល់ <b>20 MB</b>។ នេះជាដែនកំណត់របស់ Telegram សម្រាប់បូត។</span><span class="en" lang="en">Files up to <b>20 MB</b>. That's Telegram's limit for bots.</span></li>
+            <li><span class="km" lang="km">រូបថត ស្ទីគ័រ និងសារសំឡេង មិនត្រូវបានពិនិត្យទេ ព្រោះ Telegram រក្សាទុកវាឡើងវិញក្នុងទម្រង់ថ្មី។</span><span class="en" lang="en">Photos, stickers and voice messages aren't checked, because Telegram re-saves them in its own format.</span></li>
+            <li><span class="km" lang="km">បើមានឯកសារច្រើនក្នុងពេលតែមួយ បូតអាចសុំឱ្យអ្នកផ្ញើម្តងទៀតក្នុងមួយនាទី។ សេវា VirusTotal ឥតគិតថ្លៃ អនុញ្ញាត ៤ ដងក្នុងមួយនាទី និង ៥០០ ដងក្នុងមួយថ្ងៃ។</span><span class="en" lang="en">If lots of files arrive at once, the bot may ask you to resend in a minute. The free VirusTotal service allows 4 checks a minute and 500 a day.</span></li>
+            <li><span class="km" lang="km">ចង់ឃើញការព្រមានដោយសុវត្ថិភាព? ផ្ញើឯកសារសាកល្បង <a href="https://www.eicar.org/download-anti-malware-testfile/">EICAR</a>។ វាគ្មានគ្រោះថ្នាក់ទេ ប៉ុន្តែកម្មវិធីកំចាត់មេរោគទាំងអស់ចាប់វាដោយចេតនា។</span><span class="en" lang="en">Want to see a warning safely? Send the <a href="https://www.eicar.org/download-anti-malware-testfile/">EICAR test file</a>. It's harmless, but every antivirus flags it on purpose.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy: exactly what happens to a file -->
+    <section class="section section--tint" id="privacy">
+      <div class="wrap">
+        <h2><span class="km" lang="km">តើមានអ្វីកើតឡើងចំពោះឯកសាររបស់អ្នក</span><span class="en" lang="en">What happens to your file</span></h2>
+
+        <div class="flow" aria-label="What happens to your file">
+          <div class="flow__step"><span class="km" lang="km">បូតទាញយកឯកសារ ហើយបង្កើតស្នាមម្រាមដៃ</span><span class="en" lang="en">The bot downloads the file and makes its fingerprint</span></div>
+          <div class="flow__ask"><span class="km" lang="km">VirusTotal ធ្លាប់ឃើញឯកសារនេះទេ?</span><span class="en" lang="en">Has VirusTotal seen this file before?</span></div>
+          <div class="flow__branches">
+            <div class="flow__end flow__end--known">
+              <span class="tag"><span class="km" lang="km">ធ្លាប់ឃើញ</span><span class="en" lang="en">Yes, it's known</span></span>
+              <strong><span class="km" lang="km">ឆ្លើយភ្លាម</span><span class="en" lang="en">Answered right away</span></strong>
+              <p><span class="km" lang="km">មានតែស្នាមម្រាមដៃប៉ុណ្ណោះដែលត្រូវផ្ញើទៅ VirusTotal។ ឯកសាររបស់អ្នកមិនត្រូវបានបញ្ជូនទេ។</span><span class="en" lang="en">Only the fingerprint goes to VirusTotal. Your file isn't uploaded.</span></p>
+            </div>
+            <div class="flow__split">
+              <span class="tag"><span class="km" lang="km">មិនធ្លាប់ឃើញ (ឯកសារថ្មី)</span><span class="en" lang="en">No, it's new</span></span>
+              <div class="flow__ask flow__ask--small"><span class="km" lang="km">ជាកម្មវិធី ស្គ្រីប ឯកសារបង្ហាប់ ឬឯកសារ Office មានម៉ាក្រូ?</span><span class="en" lang="en">Is it an app, script, archive or Office file with macros?</span></div>
+              <div class="flow__pair">
+                <div class="flow__end flow__end--upload">
+                  <span class="tag"><span class="km" lang="km">មែន ប្រភេទងាយមានមេរោគ</span><span class="en" lang="en">Yes, a risky type</span></span>
+                  <strong><span class="km" lang="km">បញ្ជូនទៅ VirusTotal</span><span class="en" lang="en">Uploaded to VirusTotal</span></strong>
+                  <p><span class="km" lang="km">ដើម្បីស្កេនពេញលេញ។ ប្រភេទឯកសារទាំងនេះ ជាប្រភេទដែលមេរោគលាក់ខ្លួនញឹកញាប់បំផុត។</span><span class="en" lang="en">For a full scan. These are the file types malware hides in most often.</span></p>
+                </div>
+                <div class="flow__end flow__end--private">
+                  <span class="tag"><span class="km" lang="km">ទេ ឯកសារធម្មតា</span><span class="en" lang="en">No, an ordinary document</span></span>
+                  <strong><span class="km" lang="km">មិនបញ្ជូនទេ</span><span class="en" lang="en">Not uploaded</span></strong>
+                  <p><span class="km" lang="km">ឯកសារដូចជា PDF, Word, Excel និងរូបភាព នៅតែជាឯកជន។</span><span class="en" lang="en">Documents like PDF, Word, Excel and images stay private.</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="plain">
+          <li><span class="km" lang="km">បូតមិនរក្សាទុកឯកសាររបស់អ្នកទេ។ វាចងចាំតែលទ្ធផលរបស់ឯកសារនីមួយៗរយៈពេល ២៤ ម៉ោង ដើម្បីកុំឱ្យពិនិត្យឯកសារដដែលពីរដង និងចងចាំបញ្ជីការជជែកដែលត្រូវបានអនុម័ត។</span><span class="en" lang="en">The bot doesn't keep your files. It only remembers each file's result for 24 hours, so the same file isn't checked twice, plus the list of approved chats.</span></li>
+          <li><span class="km" lang="km">ឯកសារដែលបញ្ជូនទៅ VirusTotal អាចត្រូវបានមើលដោយអ្នកស្រាវជ្រាវសុវត្ថិភាព និងអតិថិជនបង់ប្រាក់របស់ VirusTotal។ នោះហើយជាមូលហេតុដែលឯកសារធម្មតាមិនត្រូវបានបញ្ជូន។</span><span class="en" lang="en">Files uploaded to VirusTotal can be viewed by VirusTotal's security researchers and paying customers. That's why ordinary documents are never uploaded.</span></li>
+          <li><span class="km" lang="km">ប្រើបូតសម្រាប់ឯកសារដែលអ្នកទទួលបានពីអ្នកដទៃ។ កុំផ្ញើកម្មវិធី ឬឯកសារបង្ហាប់ដែលមានព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក។</span><span class="en" lang="en">Use the bot for files you received from others. Don't send apps or archives that contain your own private information.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Honest limits -->
+    <section class="section" id="limits">
+      <div class="wrap limits">
+        <h2><span class="km" lang="km">អ្វីដែលវាមិនអាចធ្វើបាន</span><span class="en" lang="en">What it can't do</span></h2>
+        <ul class="plain">
+          <li><span class="km" lang="km">វាមិនអាចធានាថាឯកសារមួយមានសុវត្ថិភាព ១០០% ទេ។ ✅ មានន័យថា ថ្ងៃនេះគ្មានម៉ាស៊ីនណាមួយរកឃើញអ្វីទេ។</span><span class="en" lang="en">It can't promise a file is 100% safe. A ✅ means no engine found anything today.</span></li>
+          <li><span class="km" lang="km">វាមិនពិនិត្យតំណភ្ជាប់ (Link) ឬឯកសារធំជាង 20 MB ទេ។</span><span class="en" lang="en">It doesn't check links, or files bigger than 20 MB.</span></li>
+          <li><span class="km" lang="km">វាមិនលុបមេរោគចេញពីទូរស័ព្ទ ឬកុំព្យូទ័ររបស់អ្នកទេ។ វាគ្រាន់តែពិនិត្យឯកសារ មុនពេលអ្នកបើក។</span><span class="en" lang="en">It doesn't remove viruses from your phone or computer. It only checks files before you open them.</span></li>
+          <li><span class="km" lang="km">វាជាគម្រោងសាកល្បង ដែលដំណើរការដោយមនុស្សម្នាក់ លើសេវាឥតគិតថ្លៃ ដូច្នេះពេលខ្លះអាចយឺត ឬរវល់។</span><span class="en" lang="en">It's a beta run by one person on free services, so it can sometimes be slow or busy.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section--tint" id="faq">
+      <div class="wrap faq">
+        <h2><span class="km" lang="km">សំណួរដែលសួរញឹកញាប់</span><span class="en" lang="en">Questions</span></h2>
+
+        <details>
+          <summary><span class="km" lang="km">តើវាឥតគិតថ្លៃមែនទេ?</span><span class="en" lang="en">Is it free?</span></summary>
+          <p class="km" lang="km">បាទ/ចាស។ វាដំណើរការលើគម្រោងឥតគិតថ្លៃរបស់ Cloudflare និង VirusTotal។</p>
+          <p class="en" lang="en">Yes. It runs on the free plans of Cloudflare and VirusTotal.</p>
+        </details>
+        <details>
+          <summary><span class="km" lang="km">តើនរណាជាអ្នកដំណើរការបូតនេះ?</span><span class="en" lang="en">Who runs this bot?</span></summary>
+          <p class="km" lang="km">ហ៊ិន ជី ជាអ្នកអភិវឌ្ឍន៍នៅកម្ពុជា បានបង្កើត និងដំណើរការវាជាគម្រោងឯករាជ្យ។ វាមិនមែនបង្កើតដោយ ឬមានទំនាក់ទំនងជាមួយ Telegram ឬ VirusTotal ទេ។</p>
+          <p class="en" lang="en">Hin Cheu, a developer in Cambodia, built it and runs it as an independent project. It isn't made by, or affiliated with, Telegram or VirusTotal.</p>
+        </details>
+        <details>
+          <summary><span class="km" lang="km">ហេតុអ្វីត្រូវរង់ចាំការអនុម័ត?</span><span class="en" lang="en">Why do I need to be approved?</span></summary>
+          <p class="km" lang="km">ដើម្បីកុំឱ្យមនុស្សចម្លែកប្រើអស់ចំនួនពិនិត្យឥតគិតថ្លៃប្រចាំថ្ងៃ។ ម្ចាស់បូតទទួលបានសំណើរបស់អ្នកភ្លាមៗ ជាមួយប៊ូតុង «អនុញ្ញាត» និង «បដិសេធ»។</p>
+          <p class="en" lang="en">So strangers can't use up the free daily checks. The owner gets your request straight away, with Allow and Deny buttons.</p>
+        </details>
+        <details>
+          <summary><span class="km" lang="km">ហេតុអ្វីបូតមិនឆ្លើយក្នុងក្រុមរបស់ខ្ញុំ?</span><span class="en" lang="en">Why didn't the bot reply in my group?</span></summary>
+          <p class="km" lang="km">សូមពិនិត្យថា ក្រុមត្រូវបានអនុម័តហើយ ហើយបូតជាអ្នកគ្រប់គ្រង (Admin)។ រូបថត និងសារសំឡេង មិនត្រូវបានពិនិត្យទេ។</p>
+          <p class="en" lang="en">Check that the group has been approved and that the bot is an admin. Photos and voice messages aren't checked.</p>
+        </details>
+        <details>
+          <summary><span class="km" lang="km">តើបូតឆ្លើយជាភាសាខ្មែរបានទេ?</span><span class="en" lang="en">Does the bot reply in Khmer?</span></summary>
+          <p class="km" lang="km">មិនទាន់ទេ។ ចម្លើយគឺជាភាសាអង់គ្លេស។ ផ្នែក <a href="#replies">អត្ថន័យនៃចម្លើយនីមួយៗ</a> ពន្យល់ចម្លើយនីមួយៗជាភាសាខ្មែរ។</p>
+          <p class="en" lang="en">Not yet. Replies are in English. The <a href="#replies">What the replies mean</a> section explains each one in Khmer too.</p>
+        </details>
+        <details>
+          <summary><span class="km" lang="km">VirusTotal ជាអ្វី?</span><span class="en" lang="en">What is VirusTotal?</span></summary>
+          <p class="km" lang="km">ជាសេវាឥតគិតថ្លៃ ដែលជាកម្មសិទ្ធិរបស់ Google ដែលពិនិត្យឯកសារជាមួយម៉ាស៊ីនកំចាត់មេរោគរាប់សិបក្នុងពេលតែមួយ (ជាធម្មតា ៦០–៧០)។ ស្វែងយល់បន្ថែមនៅ <a href="https://www.virustotal.com/">virustotal.com</a>។</p>
+          <p class="en" lang="en">A free service owned by Google that checks files with dozens of antivirus engines at once (usually 60–70). Learn more at <a href="https://www.virustotal.com/">virustotal.com</a>.</p>
+        </details>
+      </div>
+    </section>
+    <!-- Disclaimer -->
+    <section class="section" id="disclaimer">
+      <div class="wrap">
+        <div class="disclaimer">
+          <h2><span class="km" lang="km">ការបដិសេធការទទួលខុសត្រូវ</span><span class="en" lang="en">Disclaimer</span></h2>
+          <div class="km" lang="km">
+            <p><b>ប្រើប្រាស់ដោយហានិភ័យរបស់អ្នកផ្ទាល់។</b> បូតនេះត្រូវបានផ្តល់ជូនដោយឥតគិតថ្លៃ និងតាមស្ថានភាពដែលវាមាន ដោយគ្មានការធានាណាមួយឡើយ។</p>
+            <p>លទ្ធផលបានមកពីម៉ាស៊ីនកំចាត់មេរោគរបស់ VirusTotal ហើយអាចខុសបាន៖ ឯកសារដែលមានគ្រោះថ្នាក់ អាចបង្ហាញ ✅ ហើយឯកសារដែលមានសុវត្ថិភាព អាចត្រូវចាត់ទុកថាមានមេរោគ។ បូតក៏អាចដំណើរការយឺត ឬមិនដំណើរការមួយរយៈផងដែរ។</p>
+            <p>ការសម្រេចចិត្តបើក ចែករំលែក ឬលុបឯកសារណាមួយ គឺជាការសម្រេចចិត្តរបស់អ្នក។ អ្នកបង្កើតបូតមិនទទួលខុសត្រូវចំពោះការខូចខាតឧបករណ៍ ការបាត់បង់ទិន្នន័យ ឬការខូចខាតផ្សេងៗ ដែលកើតឡើងពីការប្រើប្រាស់បូត ឬពីការពឹងផ្អែកលើលទ្ធផលរបស់វាឡើយ។</p>
+            <p>សម្រាប់ឯកសារសំខាន់ សូមស្កេនវាម្តងទៀតជាមួយកម្មវិធីកំចាត់មេរោគដែលបានធ្វើបច្ចុប្បន្នភាពនៅលើឧបករណ៍របស់អ្នក ហើយបើកតែឯកសារពីអ្នកដែលអ្នកស្គាល់ និងទុកចិត្ត។ ការប្រើប្រាស់បូត មានន័យថាអ្នកយល់ព្រមលើលក្ខខណ្ឌទាំងនេះ។</p>
+          </div>
+          <div class="en" lang="en">
+            <p><b>Use it at your own risk.</b> This bot is provided free and as is, without any warranty.</p>
+            <p>Results come from VirusTotal's antivirus engines and can be wrong: a dangerous file can show ✅, and a safe file can be flagged. The bot can also be slow or unavailable at times.</p>
+            <p>Whether you open, share or delete a file is your decision. The bot's creator is not responsible for damage to your devices, lost data, or any other harm that comes from using the bot or relying on its results.</p>
+            <p>For files that matter, also scan them with up-to-date antivirus software on your own device, and only open files from people you know and trust. By using the bot, you agree to these terms.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__inner">
+      <div class="foot__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <p class="km" lang="km">បង្កើតដោយ ហ៊ិន ជី នៅកម្ពុជា។ គម្រោងសាកល្បងឯករាជ្យ មិនមានទំនាក់ទំនងជាមួយ Telegram ឬ VirusTotal ទេ។ ប្រើប្រាស់ដោយហានិភ័យរបស់អ្នកផ្ទាល់ សូមអាន<a href="#disclaimer">ការបដិសេធការទទួលខុសត្រូវ</a>។</p>
+        <p class="en" lang="en">Made by Hin Cheu in Cambodia. An independent beta project, not affiliated with Telegram or VirusTotal. Use at your own risk, see the <a href="#disclaimer">disclaimer</a>.</p>
+      </div>
+      <a class="btn btn--small" href="https://t.me/tg_virus_check_bot">
+        <span class="km" lang="km">បើកក្នុង Telegram</span><span class="en" lang="en">Open in Telegram</span>
+      </a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
