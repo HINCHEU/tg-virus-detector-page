@@ -30,3 +30,11 @@ The chat demo's bot replies (in `script.js`) are copied word-for-word from the b
 python3 -m http.server 8000
 # open http://localhost:8000
 ```
+
+## Vercel Web Analytics
+
+The page includes Vercel's HTML analytics snippet. To collect data, enable
+**Web Analytics** for the project in the Vercel dashboard, then deploy the
+site. Analytics data appears in the project's **Analytics** dashboard after
+visits to the deployed site. The snippet does not collect data from the local
+preview.
