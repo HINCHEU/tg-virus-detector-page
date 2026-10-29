@@ -62,7 +62,7 @@
       ],
     },
     private: {
-      name: "contract.pdf", size: "4.3 MB",
+      name: "family-photo.jpg", size: "2.4 MB",
       steps: [
         (n) => `ℹ️ <b>${n}</b> isn't in VirusTotal's database, so it can't be checked without uploading it. It was <b>not</b> uploaded, to keep it private.<br>Only open it if you trust the sender.`,
       ],
@@ -75,6 +75,13 @@
   const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
   const clock = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   let run = 0;
+  let active = null; // the bot bubble still animating, if any
+
+  // Show a sample's final reply in a bubble straight away.
+  function finish(el, s) {
+    if (!el) el = bubble("msg--bot", "");
+    el.innerHTML = `<span class="quote">${s.name}</span>${s.steps[s.steps.length - 1](s.name)}<span class="msg__time">edited ${clock()}</span>`;
+  }
 
   function bubble(cls, html) {
     const el = document.createElement("div");
@@ -90,15 +97,19 @@
   async function play(key) {
     const s = samples[key];
     if (!s) return;
+    if (active) finish(active.el, active.s); // a tap mid-animation completes the previous reply
+    active = null;
     const me = ++run;
     picker.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sample === key)));
 
     bubble("msg--me",
       `<div class="file"><span class="file__icon">${fileIcon}</span><span><span class="file__name">${s.name}</span><br><span class="file__size">${s.size}</span></span></div><span class="msg__time">${clock()}</span>`);
+    active = { el: null, s };
     await wait(500);
     if (me !== run) return;
 
     const bot = bubble("msg--bot", `<span class="quote">${s.name}</span><span class="typing" aria-label="Scanning"><i></i><i></i><i></i></span>`);
+    active = { el: bot, s };
     await wait(700);
     if (me !== run) return;
     bot.innerHTML = `<span class="quote">${s.name}</span>🔍 Scanning <b>${s.name}</b>…<span class="msg__time">${clock()}</span>`;
@@ -111,6 +122,7 @@
       bot.innerHTML = `<span class="quote">${s.name}</span>${s.steps[i](s.name)}<span class="msg__time">edited ${clock()}</span>`;
       chat.scrollTop = chat.scrollHeight;
     }
+    if (me === run) active = null;
   }
 
   picker.addEventListener("click", (e) => {
